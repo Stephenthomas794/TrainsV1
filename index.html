@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Acorn</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+  </head>
+<body>
+
+
+<div class="container">
+
+    <div class="jumbotron">
+        <canvas id="myCanvas" width="1050" height="530">
+        </canvas>
+        <script>
+            var canvas = document.getElementById('myCanvas');
+            var context = canvas.getContext('2d');
+            var centerX = 0;
+            var centerY = 0;
+            var radius = 250;
+
+            // save state
+            context.save();
+
+            // translate context
+            context.translate(canvas.width / 2, canvas.height / 2);
+
+            // scale context horizontally
+            context.scale(2, 1);
+
+            // draw circle which will be stretched into an oval
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+
+            // restore to original state
+            context.restore();
+
+            // apply styling
+            //context.fillStyle = '#8ED6FF';
+            //context.fill();
+            context.lineWidth = 1;
+            context.strokeStyle = 'black';
+            context.setLineDash([3,10])
+            context.stroke();
+        </script>
+        <script type="text/javascript">
+
+
+setInterval(function getData(){
+    $.ajax({
+        url: '/getData',
+        type: 'POST',
+        success: function(data) {
+            if (data['trainID'] == '564'){
+                $("#uid1").text(data['uid']);
+                $("#speed1").text(data['speed']);
+                $("#time1").text(data['time']);
+                $("#trainid1").text(data['trainID']);
+            } else if (data['trainID'] == '565'){
+                $("#uid2").text(data['uid']);
+                $("#speed2").text(data['speed']);
+                $("#time2").text(data['time']);
+                $("#trainid2").text(data['trainID']);
+            }
+        }
+    });
+},5000);
+
+
+
+function speedUp(){
+    $.ajax({
+            type : 'POST',
+            url : '/speedUp',
+            data: JSON.stringify({'speed':5}),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                console.log(result);
+            }
+        });
+}
+
+function speedDown(){
+        $.ajax({
+            type : 'POST',
+            url : '/speedDown',
+            data: JSON.stringify({'speed':5}),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+                console.log(result);
+            }
+        });
+}
+</script>
+
+    </div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2 align="center">Train 1</h2>
+        <div class="container">
+            <div class="row">
+                <p>UID:</p>
+                <div class="col" id="uid1">UID: </div>
+                <div class="w-100"></div>
+                <p>SPEED:</p>
+                <div class="col" id="speed1">SPEED: </div>
+                <div class="w-100"></div>
+                <button type="button" onclick="speedUp()" class="btn btn-success btn-lg btn-block">Increase by 5</button>
+                <button type="button" onclick="speedDown()" class="btn btn-danger btn-lg btn-block">Decrease by 5</button>
+                <div class="w-100"></div>
+                <p>TIME:</p>
+                <div class="col" id="time1">TIME: </div>
+                <div class="w-100"></div>
+                <p>TRAIN ID:</p>
+                <div class="col" id="trainid1">TRAIN ID: </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <h2 align="center">Train 2</h2>
+        <div class="container">
+            <div class="row">
+                <p>UID:</p>
+                <div class="col" id="uid2">UID: </div>
+                <div class="w-100"></div>
+                <p>SPEED:</p>
+                <div class="col" id="speed2">SPEED: </div>
+                <div class="w-100"></div>
+                <button type="button" onclick="speedUp()" class="btn btn-success btn-lg btn-block">Increase by 5</button>
+                <button type="button" onclick="speedDown()" class="btn btn-danger btn-lg btn-block">Decrease by 5</button>
+                <div class="w-100"></div>
+                <p>TIME:</p>
+                <div class="col" id="time2">TIME: </div>
+                <div class="w-100"></div>
+                <p>TRAIN ID:</p>
+                <div class="col" id="trainid2">TRAIN ID: </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
